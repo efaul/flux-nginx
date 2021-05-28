@@ -1,0 +1,21 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: nginx-constraint
+spec:
+  podSelector: 
+    matchLabels:
+      # app: nginx
+      role: webserver
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: webserver
+          # app: nginx-01
+    ports:
+        - protocol: TCP
+          port: 80
