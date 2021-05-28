@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+    role: webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+        role: webserver
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80  
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   annotations:
+#     kubernetes.io/ingress.class: nginx
+#     cert-manager.io/cluster-issuer: letsencrypt-prod
+#   labels:
+#     name: nginx
+#   name: nginx
+#   namespace: default
+# spec:
+#   tls:
+#   - hosts:
+#     - '*.dev.viriciti.com'
+#     secretName: star-default-tls
+#   rules:
+#   - host: nginx.dev.viriciti.com
+#     http:
+#       paths:
+#       - backend:
+#           service:
+#             name: nginx
+#             port:
+#               number: 80
+#         path: /
+#         pathType: Exact
